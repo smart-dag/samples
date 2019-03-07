@@ -83,4 +83,19 @@ high mention quality unfair sudden shop coach ankle kind broken ski teach
 
 接下来，使用sdagwallet.js 进行开发。
 
+进入wallet项目目录，安装sdagwallet.js
+
+```
+npm install sdagwallet.js --save
+```
+
+新建一个文件 1.js
+
+```
+import Wallet from 'sdagwallet.js'
+ 
+let wallet = new Wallet();
+```
+
 （未完待续）
+
