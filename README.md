@@ -81,6 +81,13 @@ cat data/sdg/settings.json
 high mention quality unfair sudden shop coach ankle kind broken ski teach
 ```
 
+或
+
+直接使用命令，查看有钱的助记词。
+```
+sudo docker exec -it 5b64bfc6bfea cat data/sdg/settings.json
+```
+
 接下来，使用sdagwallet.js 进行开发。
 
 进入wallet项目目录，安装sdagwallet.js
