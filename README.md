@@ -88,6 +88,8 @@ high mention quality unfair sudden shop coach ankle kind broken ski teach
 sudo docker exec -it 5b64bfc6bfea cat data/sdg/settings.json
 ```
 
+默认该助记词的账户有499999903.992778个数字资产。
+
 接下来，使用sdagwallet.js 进行开发。
 
 进入wallet项目目录，安装sdagwallet.js
