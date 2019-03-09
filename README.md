@@ -39,7 +39,7 @@ registry.cn-beijing.aliyuncs.com/sdag/sdag_testnet_dev   latest              9e2
 接下来就是愉快地启动了:
 
 ```
-docker run --rm -d -p 3003:6615 9e23695ab56e
+docker run --rm -d -p 6615:6615 -p 3000:6000 9e23695ab56e
 ```
 
 这个时候，SDAG就已经在运行之中了，你可以通过和SDAG的HUB（对外端口3003）交互来进行区块链应用开发。
