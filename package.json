@@ -1,0 +1,22 @@
+{
+  "name": "samples",
+  "version": "1.0.0",
+  "description": "samples for sdag",
+  "main": "mnemonic.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smart-dag/samples.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/smart-dag/samples/issues"
+  },
+  "homepage": "https://github.com/smart-dag/samples#readme",
+  "dependencies": {
+    "sdagwallet.js": "^0.1.5"
+  }
+}
