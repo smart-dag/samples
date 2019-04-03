@@ -6,13 +6,8 @@ const thousand = require("./lib/amount");
     wallet.configHub(conf.hub);
     wallet.loginWithMnemonic(conf.role.fond.mnemonic).then(() => {
         console.log(wallet.mainAddress);
-        wallet.getBalance().then((balance) => {
-            console.log("balance",thousand.get_thousand_num(balance/10^6));
-        });
         wallet.send({amount:1,to:conf.role.scott.address,text:"hello"}).then(()=>{
-            wallet.getBalance().then((balance) => {
-                console.log("balance",thousand.get_thousand_num(balance/10^6));
-            });
+            process.exit();
         }).catch((err)=>console.log(err))
     }).catch((err) => console.log(err));
 })();
