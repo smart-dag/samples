@@ -33,18 +33,21 @@
         <div class="form-group">
             <input type="email" class="form-control" id="address" placeholder="typing your address">
         </div>
-        <button id="get" type="button" class="btn btn-primary">Get 100.0000 SDG</button>
+        <button id="get" type="button" class="btn btn-primary">Get 10.0000 SDG</button>
     </form>
 </body>
 <script>
-    $.get("/api/balance", function (balance) {
-        $("#balance").html(balance);
-        if (balance == "0") {
-            $.get("/api/address", function (address) {
-                show_alert("danger", "水龙头已经没有钱了，请联系管理员向 <b>" + address + "</b> 打测试币");
-            });
-        }
-    });
+    function get_faucet_balance() {
+        $.get("/api/balance", function (balance) {
+            $("#balance").html(balance);
+            if (balance == "0") {
+                $.get("/api/address", function (address) {
+                    show_alert("danger", "水龙头已经没有钱了，请联系管理员向 <b>" + address + "</b> 打测试币");
+                });
+            }
+        });
+    }
+    get_faucet_balance();
     $("#get").click(function () {
         $(this).attr("disabled", "disabled");
         $(this).html("getting balance ...");
@@ -72,10 +75,11 @@
                 .catch(error => show_alert("danger", error))
                 .then(response => {
                     show_alert(response.type, response.msg);
+                    get_faucet_balance();
                 });
         }
         $(".progress-bar").css("width", "100%");
-        $(this).html("Get 100.000 SDG");
+        $(this).html("Get 10.000 SDG");
         $(this).removeAttr("disabled");
     });
     function show_alert(type, text) {
