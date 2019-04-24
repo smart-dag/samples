@@ -17,6 +17,7 @@
             background: #ccc;
             padding: 20px;
             border-radius: 5px;
+            word-break: break-all;
         }
 
         .btn {
@@ -30,8 +31,7 @@
         <div id="errmsg"></div>
         <h2>SDAG faucet <span id="balance"></span></h2>
         <div class="form-group">
-            <label for="exampleInputEmail1">address</label>
-            <input type="email" class="form-control" id="address" placeholder="address">
+            <input type="email" class="form-control" id="address" placeholder="typing your address">
         </div>
         <button id="get" type="button" class="btn btn-primary">Get 100.0000 SDG</button>
     </form>
@@ -53,23 +53,26 @@
         if (address.length != 32) {
             show_alert("danger", "钱包地址不正确！")
         } else {
-            $.ajax({
-                type: "POST",
-                url: "/api/balance",
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({
+            //
+            fetch("/api/balance", {
+                body: JSON.stringify({
                     address: address
-                }),
-                dataType: "json",
-                success: function (message) {
-                    console.log(message);
-                    show_alert("success", message.responseText);
+                }), // must match 'Content-Type' header
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, same-origin, *omit
+                headers: {
+                    'user-agent': 'Mozilla/4.0 MDN Example',
+                    'content-type': 'application/json'
                 },
-                error: function (message) {
-                    console.log(message);
-                    show_alert("danger", message.responseText);
-                }
-            });
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, cors, *same-origin
+                redirect: 'follow', // manual, *follow, error
+                referrer: 'no-referrer', // *client, no-referrer
+            }).then(res => res.json())
+                .catch(error => show_alert("danger", error))
+                .then(response => {
+                    show_alert(response.type, response.msg);
+                });
         }
         $(".progress-bar").css("width", "100%");
         $(this).html("Get 100.000 SDG");

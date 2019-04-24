@@ -21,10 +21,10 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
-app.get('/', (req, res) => res.sendfile("home.html"));
+app.get('/', (req, res) => res.sendfile("./home.html"));
 app.get('/api/balance', (req, res) => {
     wallet.getBalance().then((balance) => {
-        res.send(amount.get_thousand_num(balance / 100000));
+        res.send(amount.get_thousand_num(balance / 1000000));
     }).catch((err) => res.send(err));
 
 });
@@ -47,15 +47,18 @@ app.post('/api/balance', (req, res) => {
     const address = req.body.address;
     console.log("address", address);
     if (!req.session.address) {
-        wallet.send({ amount: 100, to: address, text: "hello" }).then(() => {
+        wallet.send({ amount: 10, to: address, text: "hello" }).then(() => {
             req.session.address = address;
-            res.send("已经转账");
-        }).catch((err) => res.json({
-            err: err
-        }));
-
+            res.json({
+                type:"success",
+                msg:"转账成功！"
+            });
+        }).catch((err) => res.send("hub error"));
     } else {
-        res.send("24小时只能领取一次");
+        res.json({
+            type:"danger",
+            msg:"24小时只能领取一次！"
+        });
     }
 });
 
