@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="/bootstrap.min.css">
+    <script src="/jquery.min.js"></script>
+    <script src="/bootstrap.min.js"></script>
+    <title>SDAG水龙头</title>
+    <style>
+        .pan {
+            width: 80%;
+            max-width: 1000;
+            margin: 20px auto;
+            background: #ccc;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .btn {
+            width: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <form class="pan">
+        <div id="errmsg"></div>
+        <h2>SDAG faucet <span id="balance"></span></h2>
+        <div class="form-group">
+            <label for="exampleInputEmail1">address</label>
+            <input type="email" class="form-control" id="address" placeholder="address">
+        </div>
+        <button id="get" type="button" class="btn btn-primary">Get 100.0000 SDG</button>
+    </form>
+</body>
+<script>
+    $.get("/api/balance", function (balance) {
+        $("#balance").html(balance);
+        if (balance == "0") {
+            $.get("/api/address", function (address) {
+                show_alert("danger", "水龙头已经没有钱了，请联系管理员向 <b>" + address + "</b> 打测试币");
+            });
+        }
+    });
+    $("#get").click(function () {
+        $(this).attr("disabled", "disabled");
+        $(this).html("getting balance ...");
+
+        var address = $("#address").val();
+        if (address.length != 32) {
+            show_alert("danger", "钱包地址不正确！")
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "/api/balance",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
+                    address: address
+                }),
+                dataType: "json",
+                success: function (message) {
+                    console.log(message);
+                    show_alert("success", message.responseText);
+                },
+                error: function (message) {
+                    console.log(message);
+                    show_alert("danger", message.responseText);
+                }
+            });
+        }
+        $(".progress-bar").css("width", "100%");
+        $(this).html("Get 100.000 SDG");
+        $(this).removeAttr("disabled");
+    });
+    function show_alert(type, text) {
+        $("#errmsg").html("");
+        $("#errmsg").html('<div class="alert"><a href="#" class="close" data-dismiss="alert">&times;</a><strong></strong><span id="msg"></span></div>');
+        $(".alert").addClass("alert-" + type);
+        $("#msg").html(text);
+    }
+</script>
+
+</html>
