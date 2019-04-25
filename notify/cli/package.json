@@ -2,6 +2,7 @@
   "dependencies": {
     "bip39": "^2.6.0",
     "bitcore-mnemonic": "^8.1.1",
+    "sdagwallet.js": "^0.1.13",
     "secp256k1": "^3.6.2",
     "thirty-two": "^1.0.2"
   },
@@ -14,5 +15,8 @@
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "目前，可以订阅自己的入账信息。暂不支持出账信息。",
+  "directories": {
+    "lib": "lib"
+  }
 }

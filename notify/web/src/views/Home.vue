@@ -16,7 +16,7 @@
             </div>
             <p>
               拷贝下面地址,
-              <a href="http://sdag.io/faucet/index.html" target="_blank">
+              <a :href="'http://faucet.sdag.io:60004/'+address" target="_blank">
                 <span class="link">猛击此处打开水龙头</span>
               </a>,体验秒级到账.
             </p>

@@ -1,7 +1,7 @@
-const { default: Wallet } = require("./sdagwallet/main/index");
+const { default: Wallet } = require("sdagwallet.js");
 (async function () {
     let wallet = new Wallet();
-    wallet.configHub('ws://10.168.3.131:6615');
+    wallet.configHub("ws:127.0.0.1:6615");
     var mnemonic = wallet.generateMnemonic();
     console.log(mnemonic);
     wallet.loginWithMnemonic(mnemonic).then(() => {
