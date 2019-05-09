@@ -2,6 +2,7 @@ const express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
+const fileUpload = require('express-fileupload');
 const conf = require("./config.js");
 var fs = require('fs');
 var cors = require('cors');
@@ -33,7 +34,7 @@ app.use(session({
         maxAge: conf.sessionlife, // 设置 session 的有效时间，单位毫秒
     },
 }));
-
+app.use(fileUpload());
 const exphbs = require('express-handlebars');
 // 配置模板引擎
 app.engine('html', exphbs({
@@ -90,11 +91,66 @@ app.post('/api/balance', (req, res) => {
     }
 });
 
+//区块链存证
+app.get('/demo/upload', (req, res) => {
+    res.render('upload', {
+        layout: false,
+        title: "存证"
+    });
+});
+app.post('/demo/upload', (req, res) => {
+    if (Object.keys(req.files).length == 0) {
+        return res.status(400).send('No files were uploaded.');
+    }
+
+    // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
+    let sampleFile = req.files.sampleFile;
+    console.dir(sampleFile);
+
+    // Use the mv() method to place the file somewhere on your server
+    sampleFile.mv(`public/files/${sampleFile.md5}-${sampleFile.name}`, function (err) {
+        if (err) {
+            return res.status(500).send(err);
+        } else {
+            json_text = {
+                file_name: sampleFile.name,
+                file_hash: sampleFile.md5,
+                file_url: `${conf.host}:${conf.port}/files/${sampleFile.md5}-${sampleFile.name}`
+            }
+            var text = JSON.stringify(json_text);
+            wallet.send({ amount: 0.0001, to: "AR67Y3TISR7P2UYIB3XQKVIQNOQ2XEPD", text: text }).then((result) => {
+                console.log(result);
+                var unit_id = result.hash;//unit id
+                res.render('success', {
+                    layout: false,
+                    title: "存证",
+                    unit_id: unit_id,
+                    file_hash: json_text.file_hash,
+                    file_name: json_text.file_name,
+                    file_url: json_text.file_url
+                });
+            }).catch((err) => {
+                console.log(err);
+                res.render('upload', {
+                    layout: false,
+                    title: "存证",
+                    err: "hub错误"
+                });
+            });
+        }
+        // res.send(`files/${sampleFile.md5}-${sampleFile.name}`);
+    });
+
+});
+
 function login() {
-    wallet.loginWithMnemonic(conf.mnemonic).then(() => {
+    var mnemonic = wallet.generateMnemonic().toString();
+    if (conf.mnemonic != "random") {
+        mnemonic = conf.mnemonic;
+    }
+    wallet.loginWithMnemonic(mnemonic).then(() => {
         status = 1;
         wallet_address = wallet.mainAddress;
-
     }).catch((err) => res.send(err));
 }
 login();
